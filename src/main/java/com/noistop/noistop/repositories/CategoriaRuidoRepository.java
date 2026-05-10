@@ -9,4 +9,5 @@ public interface CategoriaRuidoRepository extends JpaRepository<CategoriaRuido, 
     List<CategoriaRuido> findByNombreCategoriaContainingIgnoreCase(String nombre);
     Optional<CategoriaRuido> findByNombreCategoria(String nombre);
     boolean existsByNombreCategoria(String nombre);
+    //CATEGORIA RUIDO REPO KENNETH
 }
