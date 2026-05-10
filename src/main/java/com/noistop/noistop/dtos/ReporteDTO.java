@@ -53,7 +53,7 @@ public class ReporteDTO {
 
     @Schema(description = "Lista de evidencias del reporte")
     private List<EvidenciaReporteDTO> evidencias;
-    //holaaaaa
+  
     public static ReporteDTO fromEntity(Reporte r) {
         ReporteDTO dto = new ReporteDTO();
         dto.setPkReporteId(r.getPkReporteId());
