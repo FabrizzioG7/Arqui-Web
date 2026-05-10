@@ -3,7 +3,7 @@ package com.noistop.noistop.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
-//Sofia
+
 @Entity
 @Table(name = "accion_administrativa")
 @Getter @Setter
