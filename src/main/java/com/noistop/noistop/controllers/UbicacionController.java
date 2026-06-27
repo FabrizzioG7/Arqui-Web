@@ -78,4 +78,11 @@ public class UbicacionController {
         ubicacionService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "Obtener distritos con más reportes", description = "Retorna una lista de distritos ordenados descendentemente por la cantidad de reportes asociados.")
+    @ApiResponse(responseCode = "200", description = "Lista de distritos y su cantidad de reportes")
+    @GetMapping("/top-distritos")
+    public ResponseEntity<List<com.noistop.noistop.dtos.DistritoReporteDTO>> obtenerTopDistritosConReportes() {
+        return ResponseEntity.ok(ubicacionService.obtenerTopDistritosConReportes());
+    }
 }
