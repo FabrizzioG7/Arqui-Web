@@ -81,4 +81,13 @@ public class AccionAdministrativaController {
         accionService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "Editar accion administrativa", description = "Actualiza datos de la accion. Valida existencia del ID. Registra cambio de estado en historial.")
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<AccionAdministrativaDTO> listarPorId(
+            @PathVariable Integer id){
+
+        return ResponseEntity.ok(accionService.listarPorId(id));
+    }
 }

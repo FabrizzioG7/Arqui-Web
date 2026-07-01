@@ -60,11 +60,17 @@ public class AccionAdministrativaService {
     @Transactional
     public AccionAdministrativaDTO actualizar(Integer id, AccionAdministrativaDTO dto) {
         AccionAdministrativa accion = accionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Acción no encontrada con id: " + id));
-
-        if (dto.getDetalle() != null && !dto.getDetalle().isBlank()) {
-            accion.setDetalle(dto.getDetalle());
-        }
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Acción no encontrada con id: " + id));
+        Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Usuario no encontrado con id: " + dto.getUsuarioId()));
+        Reporte reporte = reporteRepository.findById(dto.getReporteId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Reporte no encontrado con id: " + dto.getReporteId()));
+        accion.setDetalle(dto.getDetalle());
+        accion.setUsuario(usuario);
+        accion.setReporte(reporte);
 
         return AccionAdministrativaDTO.fromEntity(accionRepository.save(accion));
     }
@@ -82,5 +88,13 @@ public class AccionAdministrativaService {
     public List<AccionAdministrativaDTO> listar() {
         return accionRepository.findAll().stream()
                 .map(AccionAdministrativaDTO::fromEntity).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public AccionAdministrativaDTO listarPorId(Integer id){
+        AccionAdministrativa accion = accionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Acción no encontrada con id: " + id));
+        return AccionAdministrativaDTO.fromEntity(accion);
     }
 }
