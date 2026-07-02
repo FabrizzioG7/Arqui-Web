@@ -72,4 +72,9 @@ public class UbicacionService {
                         .orElseThrow(() -> new ResourceNotFoundException("Ubicación no encontrada con id: " + id))
         );
     }
+
+    @Transactional(readOnly = true)
+    public List<com.noistop.noistop.dtos.DistritoReporteDTO> obtenerTopDistritosConReportes() {
+        return ubicacionRepository.findDistritosConMasReportes();
+    }
 }
