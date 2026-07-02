@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-//@EnableMethodSecurity
+@EnableMethodSecurity
 public class WebSecurityConfig {
 
     @Autowired
@@ -53,15 +53,18 @@ public class WebSecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
-                        // Rutas públicas: login y documentación Swagger
+                        // Rutas públicas: login, registro de usuario, roles públicos y documentación Swagger
                         .requestMatchers(
                                 "/login",
+                                "/api/usuarios/registrar",
+                                "/api/roles/publico",
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/v3/api-docs"
                         ).permitAll()
-                        // Todo lo demás requiere autenticación JWT
+                        // El resto queda abierto a nivel de filtro HTTP; la protección real
+                        // por rol se aplica con @PreAuthorize en cada método (method security).
                         .anyRequest().permitAll()
                 )
                 .httpBasic(Customizer.withDefaults())

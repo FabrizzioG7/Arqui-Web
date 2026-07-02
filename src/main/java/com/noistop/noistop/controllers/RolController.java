@@ -49,6 +49,16 @@ public class RolController {
         return ResponseEntity.ok(rolService.listar());
     }
 
+    @Operation(summary = "Listar roles (público)", description = "Retorna todos los roles registrados. No requiere estar autenticado; se usa para llenar el combo de la pantalla de registro.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Lista de roles"),
+            @ApiResponse(responseCode = "404", description = "No existen registros")
+    })
+    @GetMapping("/publico")
+    public ResponseEntity<List<RolDTO>> listarPublico() {
+        return ResponseEntity.ok(rolService.listar());
+    }
+
     @Operation(summary = "Obtener rol por ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Rol encontrado"),

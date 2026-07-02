@@ -26,7 +26,7 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    @Operation(summary = "US04 - Registrar un nuevo usuario", description = "Crea un usuario. Valida campos obligatorios, formato de email y existencia del rol asignado.")
+    @Operation(summary = "US04 - Registrar un nuevo usuario", description = "Crea un usuario. Valida campos obligatorios, formato de email y existencia del rol asignado. Solo ADMIN.")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Usuario creado correctamente"),
             @ApiResponse(responseCode = "400", description = "Campos vacíos o formato inválido"),
@@ -36,6 +36,18 @@ public class UsuarioController {
     @PostMapping("/insertar")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UsuarioDTO> crear(@Valid @RequestBody UsuarioDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.crear(dto));
+    }
+
+    @Operation(summary = "Registro público de usuario", description = "Crea un usuario desde la pantalla de registro del login. No requiere estar autenticado. Valida campos obligatorios, formato de email y existencia del rol asignado.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Usuario creado correctamente"),
+            @ApiResponse(responseCode = "400", description = "Campos vacíos o formato inválido"),
+            @ApiResponse(responseCode = "404", description = "El rol especificado no existe"),
+            @ApiResponse(responseCode = "409", description = "El email ya está en uso")
+    })
+    @PostMapping("/registrar")
+    public ResponseEntity<UsuarioDTO> registrar(@Valid @RequestBody UsuarioDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.crear(dto));
     }
 

@@ -20,23 +20,34 @@ public class JwtUserDetailsService implements UserDetailsService {
     private UsuarioRepository usuarioRepository;
 
     /**
-     * Spring Security llama a este método con el valor que recibió en el campo "username" del login.
-     * En NoiStop se usa el EMAIL como identificador único para autenticarse.
+     * Spring Security llama a este método con el valor que recibió en el campo "identificador" del login.
+     * En NoiStop el usuario puede identificarse con su NOMBRE DE USUARIO (campo "nombre") o con su EMAIL.
      */
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByEmail(email)
+    public UserDetails loadUserByUsername(String identificador) throws UsernameNotFoundException {
+        Usuario usuario = usuarioRepository.findByEmailOrNombre(identificador)
                 .orElseThrow(() -> new UsernameNotFoundException(
-                        "Usuario no encontrado con email: " + email));
+                        "Usuario no encontrado con usuario/email: " + identificador));
 
         List<GrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority(usuario.getRol().getNombreRol()));
 
-        // estado = true → cuenta habilitada
+        // Se usa el email como "username" interno/subject del token, sin importar
+        // con qué campo se haya identificado el usuario al hacer login.
         return new org.springframework.security.core.userdetails.User(
                 usuario.getEmail(),
                 usuario.getPassword(),
                 roles
         );
+    }
+
+    /**
+     * Devuelve la entidad Usuario completa a partir del identificador (nombre o email).
+     * Se usa luego del login para armar la respuesta con nombre, email y rol.
+     */
+    public Usuario obtenerUsuario(String identificador) throws UsernameNotFoundException {
+        return usuarioRepository.findByEmailOrNombre(identificador)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "Usuario no encontrado con usuario/email: " + identificador));
     }
 }

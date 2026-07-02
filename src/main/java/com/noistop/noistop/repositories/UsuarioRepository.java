@@ -13,4 +13,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     boolean existsByEmail(String email);
     Optional<Usuario> findByNombre(String nombre);
+
+    // Login: el usuario puede identificarse con su nombre de usuario o su email
+    @Query("SELECT u FROM Usuario u JOIN FETCH u.rol WHERE u.email = :identificador OR u.nombre = :identificador")
+    Optional<Usuario> findByEmailOrNombre(@Param("identificador") String identificador);
 }

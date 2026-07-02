@@ -1,7 +1,6 @@
 package com.noistop.noistop.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 import java.io.Serializable;
@@ -11,10 +10,9 @@ public class JwtRequestDTO implements Serializable {
 
     private static final long serialVersionUID = 5926468583005150707L;
 
-    @NotBlank(message = "El email es obligatorio")
-    @Email(message = "El email no tiene formato válido")
-    @Schema(description = "Email del usuario registrado", example = "admin@noistop.com")
-    private String email;
+    @NotBlank(message = "El usuario o correo es obligatorio")
+    @Schema(description = "Nombre de usuario o email del usuario registrado", example = "admin@noistop.com")
+    private String identificador;
 
     @NotBlank(message = "La contraseña es obligatoria")
     @Schema(description = "Contraseña del usuario", example = "password123")
@@ -22,17 +20,17 @@ public class JwtRequestDTO implements Serializable {
 
     public JwtRequestDTO() {}
 
-    public JwtRequestDTO(String email, String password) {
-        this.email = email;
+    public JwtRequestDTO(String identificador, String password) {
+        this.identificador = identificador;
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public String getIdentificador() {
+        return identificador;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setIdentificador(String identificador) {
+        this.identificador = identificador;
     }
 
     public String getPassword() {
