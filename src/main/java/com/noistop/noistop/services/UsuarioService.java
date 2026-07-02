@@ -1,6 +1,7 @@
 package com.noistop.noistop.services;
 
 import com.noistop.noistop.dtos.UsuarioDTO;
+import com.noistop.noistop.dtos.UsuarioReporteCountDTO;
 import com.noistop.noistop.entities.Rol;
 import com.noistop.noistop.entities.Usuario;
 import com.noistop.noistop.exceptions.ConflictException;
@@ -10,6 +11,7 @@ import com.noistop.noistop.repositories.UsuarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -97,5 +99,11 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No existen registros"));
         return UsuarioDTO.fromEntity(usuario);
+    }
+
+    // Usuario más activo - Top reportadores
+    @Transactional(readOnly = true)
+    public List<UsuarioReporteCountDTO> obtenerTopReportadores() {
+        return usuarioRepository.findTopReportadores();
     }
 }

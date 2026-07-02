@@ -101,4 +101,14 @@ public class UsuarioController {
         usuarioService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "Usuario más activo", description = "Devuelve el ranking de usuarios según la cantidad de reportes que han registrado.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Ranking de usuarios obtenido correctamente")
+    })
+    @GetMapping("/top-reportadores")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<com.noistop.noistop.dtos.UsuarioReporteCountDTO>> obtenerTopReportadores() {
+        return ResponseEntity.ok(usuarioService.obtenerTopReportadores());
+    }
 }
