@@ -18,6 +18,9 @@ public class EvidenciaReporte {
     @Column(name = "rutaarchivo", nullable = false, length = 500)
     private String rutaArchivo;
 
+    @Column(name = "nombre_original", length = 255)
+    private String nombreOriginal;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_reporteid", nullable = false)
     private Reporte reporte;

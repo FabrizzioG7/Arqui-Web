@@ -2,8 +2,6 @@ package com.noistop.noistop.dtos;
 
 import com.noistop.noistop.entities.EvidenciaReporte;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.time.LocalDateTime;
 
@@ -15,11 +13,15 @@ public class EvidenciaReporteDTO {
     @Schema(description = "ID autogenerado", example = "1")
     private Integer pkEvidenciaId;
 
-    @NotBlank(message = "La ruta del archivo es obligatoria")
-    @Schema(description = "Ruta del archivo de evidencia", example = "/uploads/evidencia_001.jpg")
+    @Schema(description = "Nombre interno con el que se guardó el archivo en el servidor", example = "9f1c2b3a-....jpg")
     private String rutaArchivo;
 
-    @NotNull(message = "El ID del reporte es obligatorio")
+    @Schema(description = "Nombre original del archivo tal como lo subió el usuario", example = "foto_ruido.jpg")
+    private String nombreOriginal;
+
+    @Schema(description = "URL para ver/descargar la imagen (GET, requiere estar logueado)", example = "/api/evidencias/1/archivo")
+    private String urlArchivo;
+
     @Schema(description = "ID del reporte al que pertenece", example = "1")
     private Integer reporteId;
 
@@ -27,17 +29,13 @@ public class EvidenciaReporteDTO {
     private LocalDateTime createdAt;
 
     public static EvidenciaReporteDTO fromEntity(EvidenciaReporte e) {
-        return new EvidenciaReporteDTO(
-                e.getPkEvidenciaId(),
-                e.getRutaArchivo(),
-                e.getReporte() != null ? e.getReporte().getPkReporteId() : null,
-                e.getCreatedAt()
-        );
-    }
-
-    public EvidenciaReporte toEntity() {
-        EvidenciaReporte e = new EvidenciaReporte();
-        e.setRutaArchivo(this.rutaArchivo);
-        return e;
+        EvidenciaReporteDTO dto = new EvidenciaReporteDTO();
+        dto.setPkEvidenciaId(e.getPkEvidenciaId());
+        dto.setRutaArchivo(e.getRutaArchivo());
+        dto.setNombreOriginal(e.getNombreOriginal());
+        dto.setUrlArchivo("/api/evidencias/" + e.getPkEvidenciaId() + "/archivo");
+        dto.setReporteId(e.getReporte() != null ? e.getReporte().getPkReporteId() : null);
+        dto.setCreatedAt(e.getCreatedAt());
+        return dto;
     }
 }
