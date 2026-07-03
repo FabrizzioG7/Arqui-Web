@@ -1,6 +1,7 @@
 package com.noistop.noistop.controllers;
 
 import com.noistop.noistop.dtos.AccionAdministrativaDTO;
+import com.noistop.noistop.dtos.AccionMensualDTO;
 import com.noistop.noistop.services.AccionAdministrativaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -91,4 +92,14 @@ public class AccionAdministrativaController {
 
         return ResponseEntity.ok(accionService.listarPorId(id));
     }
+    @Operation(summary = "Comparativa mensual de acciones por autoridad", description = "Retorna el total de acciones administrativas agrupadas por autoridad segun mes.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Comparativa mensual obtenida correctamente")
+    })
+    @GetMapping("/estadisticas/mensual")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<AccionMensualDTO>> comparativaMensual() {
+        return ResponseEntity.ok(accionService.obtenerComparativaMensual());
+    }
+
 }
