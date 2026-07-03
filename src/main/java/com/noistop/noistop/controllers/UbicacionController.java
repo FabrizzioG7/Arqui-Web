@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class UbicacionController {
             @ApiResponse(responseCode = "400", description = "Campos vacíos o coordenadas inválidas")
     })
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY')")
     public ResponseEntity<UbicacionDTO> crear(@Valid @RequestBody UbicacionDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(ubicacionService.crear(dto));
     }
@@ -38,6 +40,7 @@ public class UbicacionController {
     @Operation(summary = "US10 - Listar todas las ubicaciones", description = "Retorna todas las ubicaciones con id, ubicación, latitud, longitud y fecha de creación.")
     @ApiResponse(responseCode = "200", description = "Lista de ubicaciones (puede estar vacía)")
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER','AUTHORITY')")
     public ResponseEntity<List<UbicacionDTO>> listar() {
         return ResponseEntity.ok(ubicacionService.listar());
     }
@@ -48,6 +51,7 @@ public class UbicacionController {
             @ApiResponse(responseCode = "404", description = "Ubicación no encontrada")
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER','AUTHORITY')")
     public ResponseEntity<UbicacionDTO> obtenerPorId(
             @Parameter(description = "ID de la ubicación", example = "1") @PathVariable Integer id) {
         return ResponseEntity.ok(ubicacionService.obtenerPorId(id));
@@ -60,6 +64,7 @@ public class UbicacionController {
             @ApiResponse(responseCode = "404", description = "Ubicación no encontrada")
     })
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY')")
     public ResponseEntity<UbicacionDTO> actualizar(
             @Parameter(description = "ID de la ubicación", example = "1") @PathVariable Integer id,
             @RequestBody UbicacionDTO dto) {
@@ -73,6 +78,7 @@ public class UbicacionController {
             @ApiResponse(responseCode = "409", description = "La ubicación tiene reportes asociados")
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> eliminar(
             @Parameter(description = "ID de la ubicación", example = "1") @PathVariable Integer id) {
         ubicacionService.eliminar(id);
@@ -82,6 +88,7 @@ public class UbicacionController {
     @Operation(summary = "Obtener distritos con más reportes", description = "Retorna una lista de distritos ordenados descendentemente por la cantidad de reportes asociados.")
     @ApiResponse(responseCode = "200", description = "Lista de distritos y su cantidad de reportes")
     @GetMapping("/top-distritos")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY')")
     public ResponseEntity<List<com.noistop.noistop.dtos.DistritoReporteDTO>> obtenerTopDistritosConReportes() {
         return ResponseEntity.ok(ubicacionService.obtenerTopDistritosConReportes());
     }

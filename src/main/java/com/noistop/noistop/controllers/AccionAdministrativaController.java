@@ -33,14 +33,14 @@ public class AccionAdministrativaController {
             @ApiResponse(responseCode = "404", description = "Reporte o usuario no encontrado")
     })
     @PostMapping("/insertar")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY')")
     public ResponseEntity<AccionAdministrativaDTO> crear(@Valid @RequestBody AccionAdministrativaDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(accionService.crear(dto));
     }
 
     @Operation(summary = "Listar todas las acciones administrativas")
     @GetMapping("/listar")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY')")
     public ResponseEntity<List<AccionAdministrativaDTO>> listar() {
         return ResponseEntity.ok(accionService.listar());
     }
@@ -51,6 +51,7 @@ public class AccionAdministrativaController {
             @ApiResponse(responseCode = "404", description = "Reporte no encontrado")
     })
     @GetMapping("/reporte/{reporteId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY','USER')")
     public ResponseEntity<List<AccionAdministrativaDTO>> historialPorReporte(
             @Parameter(description = "ID del reporte", example = "1") @PathVariable Integer reporteId) {
         return ResponseEntity.ok(accionService.listarPorReporte(reporteId));
@@ -62,7 +63,7 @@ public class AccionAdministrativaController {
             @ApiResponse(responseCode = "404", description = "Acción no encontrada")
     })
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY')")
     public ResponseEntity<AccionAdministrativaDTO> actualizar(
             @Parameter(description = "ID de la acción", example = "1") @PathVariable Integer id,
             @RequestBody AccionAdministrativaDTO dto) {
@@ -84,7 +85,7 @@ public class AccionAdministrativaController {
 
     @Operation(summary = "Editar accion administrativa", description = "Actualiza datos de la accion. Valida existencia del ID. Registra cambio de estado en historial.")
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY')")
     public ResponseEntity<AccionAdministrativaDTO> listarPorId(
             @PathVariable Integer id){
 

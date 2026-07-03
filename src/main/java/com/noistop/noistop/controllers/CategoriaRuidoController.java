@@ -45,7 +45,7 @@ public class CategoriaRuidoController {
             @ApiResponse(responseCode = "200", description = "Lista de categorías (puede estar vacía)"),
     })
     @GetMapping("/listar")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER','AUTHORITY')")
     public ResponseEntity<List<CategoriaRuidoDTO>> listar(
             @Parameter(description = "Texto parcial para buscar categorías por nombre (US27)", example = "tráfico")
             @RequestParam(required = false) String nombre) {
@@ -61,7 +61,7 @@ public class CategoriaRuidoController {
             @ApiResponse(responseCode = "404", description = "Categoría no encontrada")
     })
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER','AUTHORITY')")
     public ResponseEntity<CategoriaRuidoDTO> obtenerPorId(
             @Parameter(description = "ID de la categoría", example = "1") @PathVariable Integer id) {
         return ResponseEntity.ok(categoriaService.obtenerPorId(id));
@@ -102,7 +102,7 @@ public class CategoriaRuidoController {
             @ApiResponse(responseCode = "404", description = "Categoría no encontrada")
     })
     @GetMapping("/{id}/reportes")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY')")
     public ResponseEntity<List<ReporteDTO>> reportesPorCategoria(
             @Parameter(description = "ID de la categoría", example = "1") @PathVariable Integer id) {
         return ResponseEntity.ok(categoriaService.listarReportesPorCategoria(id));

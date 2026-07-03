@@ -36,7 +36,7 @@ public class ReporteController {
             @ApiResponse(responseCode = "404", description = "Usuario, categoría o ubicación no encontrados")
     })
     @PostMapping("/insertar")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER','AUTHORITY')")
     public ResponseEntity<ReporteDTO> crear(@Valid @RequestBody ReporteDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(reporteService.crear(dto));
     }
@@ -47,7 +47,7 @@ public class ReporteController {
             @ApiResponse(responseCode = "404", description = "No existen reportes registrados")
     })
     @GetMapping("/listar")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY')")
     public ResponseEntity<List<ReporteDTO>> listar() {
         return ResponseEntity.ok(reporteService.listar());
     }
@@ -58,7 +58,7 @@ public class ReporteController {
             @ApiResponse(responseCode = "404", description = "Reporte no encontrado")
     })
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY','USER')")
     public ResponseEntity<ReporteDTO> obtenerPorId(
             @Parameter(description = "ID del reporte", example = "1") @PathVariable Integer id) {
         return ResponseEntity.ok(reporteService.obtenerPorId(id));
@@ -71,7 +71,7 @@ public class ReporteController {
             @ApiResponse(responseCode = "404", description = "No se encontró el registro")
     })
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY')")
     public ResponseEntity<ReporteDTO> actualizar(
             @Parameter(description = "ID del reporte", example = "1") @PathVariable Integer id,
             @RequestBody ReporteDTO dto) {
@@ -97,7 +97,7 @@ public class ReporteController {
             @ApiResponse(responseCode = "400", description = "Parámetro 'distrito' obligatorio no enviado")
     })
     @GetMapping("/por-distrito")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY')")
     public ResponseEntity<Map<String, Object>> reportesPorDistrito(
             @Parameter(description = "Nombre del distrito", example = "Miraflores")
             @RequestParam String distrito) {
@@ -110,7 +110,7 @@ public class ReporteController {
             @ApiResponse(responseCode = "404", description = "No existen reportes")
     })
     @GetMapping("/por-ubicacion")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY')")
     public ResponseEntity<List<Map<String, Object>>> reportesPorUbicacion() {
         return ResponseEntity.ok(reporteService.reportesPorUbicacion());
     }
@@ -121,7 +121,7 @@ public class ReporteController {
             @ApiResponse(responseCode = "404", description = "No existen reportes registrados para este usuario")
     })
     @GetMapping("/historial/usuario/{usuarioId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY','USER')")
     public ResponseEntity<List<ReporteDTO>> historialPorUsuario(
             @Parameter(description = "ID del usuario", example = "1") @PathVariable Integer usuarioId) {
         return ResponseEntity.ok(reporteService.historialPorUsuario(usuarioId));
@@ -134,7 +134,7 @@ public class ReporteController {
             @ApiResponse(responseCode = "404", description = "No se encontraron reportes en el rango de fechas")
     })
     @GetMapping("/historial/usuario/{usuarioId}/filtrar")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY','USER')")
     public ResponseEntity<List<ReporteDTO>> historialPorFecha(
             @Parameter(description = "ID del usuario", example = "1") @PathVariable Integer usuarioId,
             @Parameter(description = "Fecha de inicio (ISO formato: 2024-01-01T00:00:00)", example = "2024-01-01T00:00:00")

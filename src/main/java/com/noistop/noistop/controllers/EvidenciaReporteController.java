@@ -33,13 +33,14 @@ public class EvidenciaReporteController {
             @ApiResponse(responseCode = "404", description = "No existe el reporte asociado")
     })
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER','AUTHORITY')")
     public ResponseEntity<EvidenciaReporteDTO> crear(@Valid @RequestBody EvidenciaReporteDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(evidenciaService.crear(dto));
     }
 
     @Operation(summary = "Listar todas las evidencias")
     @GetMapping("/listar")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY')")
     public ResponseEntity<List<EvidenciaReporteDTO>> listar() {
         return ResponseEntity.ok(evidenciaService.listar());
     }
@@ -50,7 +51,7 @@ public class EvidenciaReporteController {
             @ApiResponse(responseCode = "404", description = "Reporte no encontrado")
     })
     @GetMapping("/reporte/{reporteId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY','USER')")
     public ResponseEntity<List<EvidenciaReporteDTO>> listarPorReporte(
             @Parameter(description = "ID del reporte", example = "1") @PathVariable Integer reporteId) {
         return ResponseEntity.ok(evidenciaService.listarPorReporte(reporteId));

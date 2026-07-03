@@ -65,6 +65,7 @@ public class RolController {
             @ApiResponse(responseCode = "404", description = "No existen registros")
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<RolDTO> obtenerPorId(
             @Parameter(description = "ID del rol", example = "1") @PathVariable Integer id) {
         return ResponseEntity.ok(rolService.obtenerPorId(id));
@@ -78,6 +79,7 @@ public class RolController {
             @ApiResponse(responseCode = "409", description = "Nombre de rol duplicado")
     })
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<RolDTO> actualizar(
             @Parameter(description = "ID del rol a actualizar", example = "1") @PathVariable Integer id,
             @Valid @RequestBody RolDTO dto) {
@@ -90,6 +92,7 @@ public class RolController {
             @ApiResponse(responseCode = "404", description = "Rol no encontrado")
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> eliminar(
             @Parameter(description = "ID del rol a eliminar", example = "1") @PathVariable Integer id) {
         rolService.eliminar(id);
