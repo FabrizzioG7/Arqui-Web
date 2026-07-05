@@ -6,4 +6,7 @@ import java.util.List;
 
 public interface EvidenciaReporteRepository extends JpaRepository<EvidenciaReporte, Integer> {
     List<EvidenciaReporte> findByReportePkReporteId(Integer reporteId);
+
+    // Evidencias de todos los reportes hechos por un usuario (para "Mis Evidencias")
+    List<EvidenciaReporte> findByReporte_Usuario_PkUsuarioId(Integer usuarioId);
 }

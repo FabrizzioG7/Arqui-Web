@@ -67,6 +67,14 @@ public class EvidenciaReporteController {
         return ResponseEntity.ok(evidenciaService.listarPorReporte(reporteId));
     }
 
+    @Operation(summary = "Mis Evidencias: listar todas las evidencias de los reportes de un usuario")
+    @GetMapping("/usuario/{usuarioId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY','USER')")
+    public ResponseEntity<List<EvidenciaReporteDTO>> listarPorUsuario(
+            @Parameter(description = "ID del usuario", example = "1") @PathVariable Integer usuarioId) {
+        return ResponseEntity.ok(evidenciaService.listarPorUsuario(usuarioId));
+    }
+
     @Operation(summary = "Ver / descargar la imagen de una evidencia")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Imagen de la evidencia"),

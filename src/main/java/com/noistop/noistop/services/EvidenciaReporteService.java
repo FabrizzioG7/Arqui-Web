@@ -58,6 +58,13 @@ public class EvidenciaReporteService {
                 .stream().map(EvidenciaReporteDTO::fromEntity).collect(Collectors.toList());
     }
 
+    // US19 - "Mis Evidencias": evidencias de todos los reportes de un usuario
+    @Transactional(readOnly = true)
+    public List<EvidenciaReporteDTO> listarPorUsuario(Integer usuarioId) {
+        return evidenciaRepository.findByReporte_Usuario_PkUsuarioId(usuarioId)
+                .stream().map(EvidenciaReporteDTO::fromEntity).collect(Collectors.toList());
+    }
+
     @Transactional
     public void eliminar(Integer id) {
         EvidenciaReporte evidencia = evidenciaRepository.findById(id)

@@ -32,7 +32,7 @@ public class UbicacionController {
             @ApiResponse(responseCode = "400", description = "Campos vacíos o coordenadas inválidas")
     })
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHORITY','USER')")
     public ResponseEntity<UbicacionDTO> crear(@Valid @RequestBody UbicacionDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(ubicacionService.crear(dto));
     }
