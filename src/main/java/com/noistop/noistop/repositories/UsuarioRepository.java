@@ -1,0 +1,28 @@
+package com.noistop.noistop.repositories;
+
+import com.noistop.noistop.dtos.UsuarioReporteCountDTO;
+import com.noistop.noistop.entities.Usuario;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
+    @Query("SELECT u FROM Usuario u JOIN FETCH u.rol WHERE u.email = :email")
+    Optional<Usuario> findByEmail(@Param("email") String email);
+
+    boolean existsByEmail(String email);
+    Optional<Usuario> findByNombre(String nombre);
+
+    // Login: el usuario puede identificarse con su nombre de usuario o su email
+    @Query("SELECT u FROM Usuario u JOIN FETCH u.rol WHERE u.email = :identificador OR u.nombre = :identificador")
+    Optional<Usuario> findByEmailOrNombre(@Param("identificador") String identificador);
+
+    @Query("SELECT new com.noistop.noistop.dtos.UsuarioReporteCountDTO(u.nombre, COUNT(r)) " +
+            "FROM Usuario u JOIN u.reportes r " +
+            "GROUP BY u.pkUsuarioId, u.nombre " +
+            "ORDER BY COUNT(r) DESC")
+    List<UsuarioReporteCountDTO> findTopReportadores();
+}
