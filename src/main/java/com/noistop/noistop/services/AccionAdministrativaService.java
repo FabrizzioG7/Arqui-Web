@@ -1,6 +1,7 @@
 package com.noistop.noistop.services;
 
 import com.noistop.noistop.dtos.AccionAdministrativaDTO;
+import com.noistop.noistop.dtos.AccionMensualDTO;
 import com.noistop.noistop.entities.AccionAdministrativa;
 import com.noistop.noistop.entities.Reporte;
 import com.noistop.noistop.entities.Usuario;
@@ -96,5 +97,10 @@ public class AccionAdministrativaService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Acción no encontrada con id: " + id));
         return AccionAdministrativaDTO.fromEntity(accion);
+    }
+
+    @Transactional(readOnly = true)
+    public List<AccionMensualDTO> obtenerComparativaMensual() {
+        return accionRepository.obtenerComparativaMensual();
     }
 }
